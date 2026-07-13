@@ -411,9 +411,32 @@ ${issue}
           '',
           '',
         ])[1].trim();
+        // Priority
+        const priority = (text.match(/Priority\s*:\s*(.+)/) || [
+          '',
+          '',
+        ])[1].trim();
 
+        // Problem Type
+        const problemType = (text.match(/Problem Type\s*:\s*(.+)/) || [
+          '',
+          '',
+        ])[1].trim();
+
+        // Problem Service
+        const problemService = (text.match(/Problem Service\s*:\s*(.+)/) || [
+          '',
+          '',
+        ])[1].trim();
+
+        // Subsystem
+        const subsystem = (text.match(/Subsystem\s*:\s*(.+)/) || [
+          '',
+          '',
+        ])[1].trim();
         const report = `📋 Update
-Zone : [ระบุจังหวัด]
+
+Zone : [ระบุ UBN/KKN]
 JOB : ${job}
 
 Title : ${title}
@@ -421,21 +444,27 @@ Title : ${title}
 Assign To : ${name}
 Tel. : ${tel}
 
-:: priority : Critical
-:: Service : Outage
-:: Subsystem : EDS-OSP
+:: Priority : ${priority}
+:: Subsystem : ${subsystem}
+:: Problem Type : ${problemType}
+:: Problem Service : ${problemService}
 :: Created : ${created}
 :: Finish : ${finish}
 :: Assign By : Auto Dispatch
+
 ━━━━━━━━━━━━━━━━━━
+
 :: Accept(Time) : [ระบุเวลา]
 :: Depart(Time) : [ระบุเวลา]
-:: เดินทาง : [ระบุระยะทาง] km. 
+:: เดินทาง : [ระบุระยะทาง] km.
+
 ━━━━━━━━━━━━━━━━━━
-:: On site : [ระบุเวลา]
+
+:: On Site : [ระบุเวลา]
 :: (เจอแผล) : [ระบุ]
 :: สาเหตุเสีย : [ระบุ]
-:: Done : [ระบุเวลา]
+:: Done : [ระบุ]
+
 `;
 
         document.getElementById('edsReport').value = report;
