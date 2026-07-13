@@ -6,6 +6,25 @@
     <title>Field Report Dashboard</title>
 
     <style>
+      #ospReport {
+        background: #f8fafc;
+        border: 2px solid #dbeafe;
+        font-family: Consolas, monospace;
+        line-height: 1.5;
+        font-size: 14px;
+        white-space: pre-wrap;
+      }
+
+      #ospText {
+        background: #fff;
+        border: 2px solid #e5e7eb;
+      }
+
+      h2 {
+        color: #0d6efd;
+        text-align: center;
+        font-weight: 800;
+      }
       .app-header {
         text-align: center;
         font-size: 28px;
@@ -182,15 +201,19 @@
           📋 คัดลอกรายงาน
         </button>
       </div>
+      <div class="mini-btn-area">
+        <button onclick="clearEDS()" class="btn-clear">🗑 Clear</button>
+      </div>
 
       <textarea id="edsReport" rows="25" placeholder="รายงาน EDS ที่แปลงแล้ว">
       </textarea>
     </div>
 
     <div id="ospPage" class="container page">
-      <h2>🛠 สร้างรายงาน OSP</h2>
+      <h2>👷 NQM 3BB MA</h2>
 
-      <textarea id="ospText" rows="12" placeholder="วางใบงาน OSP"> </textarea>
+      <textarea id="ospText" rows="10" placeholder="วางใบงาน OSP จาก TTSM">
+      </textarea>
 
       <div class="top-btn-group">
         <button onclick="parseOSP()" class="btn-top btn-primary">
@@ -201,8 +224,14 @@
           📋 คัดลอกรายงาน
         </button>
       </div>
-
-      <textarea id="ospReport" rows="30" placeholder="รายงานที่แปลงแล้ว">
+      <div class="mini-btn-area">
+        <button onclick="clearOSP()" class="btn-clear">🗑 Clear</button>
+      </div>
+      <textarea
+        id="ospReport"
+        rows="35"
+        placeholder="รายงานที่แปลงแล้วจะแสดงที่นี่"
+      >
       </textarea>
     </div>
 
@@ -249,7 +278,13 @@
           gps = coord[1];
         }
 
-        const report = `ใบงานที่ :: 1 ครับ
+        const report = `👷 NQM 3BB MA
+
+TEAM :: [ระบุ]
+
+━━━━━━━━━━━━━━━━━━━━━━
+
+ใบงานที่ :: 1
 
 JB ID : ${job}
 
@@ -259,35 +294,53 @@ Priority : ${priority}
 
 เข้าตรวจสอบแก้ไข SP Down ครับ
 
-${gps}
+📍 พิกัด : ${gps}
 
 *รายละเอียด เช่น แผนที่ Igis จะส่งใน เมนู OSP บน TTSM ครับ
 
+━━━━━━━━━━━━━━━━━━━━━━
+
 :: ใบงานเริ่มต้น : ${start}
 :: ใบงานเสร็จสิ้น : ${finish}
-:: รับงาน :
-:: เดินทาง :
-:: ระยะทาง :
-:: On Site :
-:: ผล test OTDR :
-:: รายละเอียดเพิ่มเติม :
-:: เจอแผล :
-:: สาเหตุเสีย :
-:: เริ่มแก้ไข :
-:: แก้ไขโดย :
-:: เริ่มตัดต่อหัวที่ 1 :
-:: พิกัดหัวต่อที่ 1 :
-:: เริ่มตัดต่อหัวที่ 2 :
-:: พิกัดหัวต่อที่ 2 :
-:: เริ่มตัดต่อหัวที่ 3 :
-:: พิกัดหัวต่อที่ 3 :
-:: เริ่มตัดต่อหัวที่ 4 :
-:: พิกัดหัวต่อที่ 4 :
-:: ไม่มี alarm (Done Job) :
-:: โยกคอร์ใช้งาน :
-:: สาเหตุล่าช้า :
 
-:: รายการ Material ที่ใช้งาน
+:: รับงาน : [ระบุ]
+:: เดินทาง : [ระบุ]
+:: ระยะทาง : [ระบุ] km.
+:: On Site : [ระบุ]
+
+━━━━━━━━━━━━━━━━━━━━━━
+
+:: ผล test OTDR : [ระบุ]
+:: รายละเอียดเพิ่มเติม : [ระบุ]
+:: เจอแผล : [ระบุ]
+:: สาเหตุเสีย : [ระบุ]
+
+:: เริ่มแก้ไข : [ระบุ]
+:: แก้ไขโดย : [ระบุ]
+
+━━━━━━━━━━━━━━━━━━━━━━
+
+:: เริ่มตัดต่อหัวที่ 1 : [ระบุ]
+:: พิกัดหัวต่อที่ 1 : [ระบุ]
+
+:: เริ่มตัดต่อหัวที่ 2 : [ระบุ]
+:: พิกัดหัวต่อที่ 2 : [ระบุ]
+
+:: เริ่มตัดต่อหัวที่ 3 : [ระบุ]
+:: พิกัดหัวต่อที่ 3 : [ระบุ]
+
+:: เริ่มตัดต่อหัวที่ 4 : [ระบุ]
+:: พิกัดหัวต่อที่ 4 : [ระบุ]
+
+━━━━━━━━━━━━━━━━━━━━━━
+
+:: ไม่มี Alarm (Done Job) : [ระบุ]
+:: โยกคอร์ใช้งาน : [ระบุ]
+:: สาเหตุล่าช้า : [ระบุ]
+
+━━━━━━━━━━━━━━━━━━━━━━
+
+📦 รายการ Material ที่ใช้งาน
 
 - Cable ARSS 12 core =
 - Closure 12 core = 2
@@ -309,6 +362,12 @@ ${gps}
         navigator.clipboard.writeText(text);
 
         alert('✅ คัดลอกรายงานแล้ว');
+      }
+      function clearOSP() {
+        document.getElementById('ospText').value = '';
+        document.getElementById('ospReport').value = '';
+
+        alert('✅ ล้างข้อมูลแล้ว');
       }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
@@ -393,6 +452,12 @@ Tel. : ${tel}
         });
 
         btn.classList.add('active');
+      }
+      function clearEDS() {
+        document.getElementById('rawText').value = '';
+        document.getElementById('edsReport').value = '';
+
+        alert('✅ ล้างข้อมูล EDS แล้ว');
       }
     </script>
   </body>
