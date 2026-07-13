@@ -259,7 +259,12 @@
           '',
           '',
         ])[1].trim();
+        let issue = 'เข้าตรวจสอบแก้ไขเหตุขัดข้อง';
 
+        if (title.includes('Splitter Down'))
+          issue = 'เข้าตรวจสอบ Splitter Down';
+        if (title.includes('PON Down')) issue = 'เข้าตรวจสอบ PON Down';
+        if (title.includes('High Loss')) issue = 'เข้าตรวจสอบ High Loss';
         // Start
         const start = (text.match(/Assign Date\s*:\s*(.+)/) || [
           '',
@@ -295,7 +300,7 @@ Title : ${title}
 
 Priority : ${priority}
 
-เข้าตรวจสอบแก้ไข SP Down ครับ
+${issue}
 
 📍 พิกัด : ${gps}
 
