@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<!-- saved from url=(0097)https://stackblitzstarterstsb5yz4f-opov-%2D8080-%2D87cf54cd.local-credentialless.webcontainer.io/ -->
+<html lang="th"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Field Report Dashboard</title>
+
+    <style>
+      .app-header {
+        text-align: center;
+        font-size: 28px;
+        font-weight: 800;
+        color: #0d6efd;
+        margin-bottom: 20px;
+        letter-spacing: 1px;
+      }
+      .menu-tabs {
+        display: flex;
+        gap: 12px;
+        max-width: 900px;
+        margin: 0 auto 20px;
+      }
+
+      .tab-btn {
+        flex: 1;
+        padding: 16px;
+        border: none;
+        border-radius: 16px;
+        cursor: pointer;
+        font-size: 18px;
+        font-weight: 700;
+        color: #555;
+        background: #ffffff;
+        border: 2px solid #e5e7eb;
+        transition: all 0.25s ease;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+      }
+
+      .tab-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      .tab-btn.active {
+        color: #fff;
+        border: none;
+        background: linear-gradient(135deg, #0d6efd, #00c6ff);
+      }
+
+      .page {
+        display: none;
+      }
+
+      .page.active {
+        display: block;
+      }
+      .top-btn-group {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 15px;
+      }
+
+      /* ปุ่มด้านบน */
+      .btn-top {
+        padding: 12px;
+        border: none;
+        border-radius: 10px;
+        font-weight: bold;
+        color: white;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+
+      /* สี */
+      .btn-primary {
+        background: linear-gradient(135deg, #007bff, #00c6ff);
+      }
+
+      .btn-danger {
+        background: linear-gradient(135deg, #dc3545, #ff6b6b);
+      }
+
+      .btn-success {
+        background: linear-gradient(135deg, #28a745, #43e97b);
+      }
+
+      .btn-gray {
+        background: #6c757d;
+      }
+
+      /* effect */
+      .btn-top:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .btn-top:active {
+        transform: scale(0.97);
+      }
+      body {
+        font-family: Arial, sans-serif;
+        background: #f5f7fa;
+        margin: 0;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      h2 {
+        text-align: center;
+        margin-bottom: 15px;
+      }
+
+      input,
+      textarea,
+      select {
+        width: 100%;
+        padding: 10px;
+        margin: 6px 0;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+      }
+
+      button {
+        width: 100%;
+        padding: 12px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background: #0056b3;
+      }
+
+      .row {
+        display: flex;
+        gap: 10px;
+      }
+
+      .row input {
+        flex: 1;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="app-header">FIELD REPORT DASHBOARD</div>
+    <div class="menu-tabs">
+      <button class="tab-btn active" onclick="showPage(&#39;edsPage&#39;,this)">
+        📋 EDS REPORT
+      </button>
+
+      <button class="tab-btn" onclick="showPage(&#39;ospPage&#39;,this)">
+        🛠 OSP REPORT
+      </button>
+    </div>
+
+    <div id="edsPage" class="container page active">
+      <textarea id="rawText" placeholder="วางข้อมูล Job ตรงนี้"></textarea>
+      <div class="top-btn-group">
+        <button onclick="parseText()" class="btn-top btn-primary">
+          📥 แปลงข้อมูล
+        </button>
+
+        <button onclick="resetForm()" class="btn-top btn-danger">
+          🔄 รีเซ็ท
+        </button>
+
+        <button onclick="saveData()" class="btn-top btn-success">
+          💾 บันทึก
+        </button>
+
+        <button onclick="loadData()" class="btn-top btn-gray">
+          📂 โหลดล่าสุด
+        </button>
+      </div>
+
+      <h2>📋 รายงาน EDS</h2>
+      <input id="zone" placeholder="Zone">
+      <input id="job" placeholder="JOB">
+      <input id="title" placeholder="Title">
+
+      <input id="ron" placeholder="กองงาน หรือ ชื่อพนักงาน">
+      <input id="tel" placeholder="Tel">
+
+      <div class="row">
+        <input id="created" placeholder="Created">
+        <input id="finish" placeholder="Finish">
+      </div>
+
+      <div class="row">
+        <input id="accept" placeholder="Accept">
+        <input id="depart" placeholder="Depart">
+        <input id="distance" placeholder="ระยะทาง (km)">
+      </div>
+      <input id="onsite" placeholder="On site">
+      <div class="row"></div>
+
+      <textarea id="cause" placeholder="สาเหตุเสีย"></textarea>
+      <textarea id="done" placeholder="วิธีแก้ไข / Done"></textarea>
+
+      <button onclick="report1()">📌 รายงานช่วงที่ 1</button>
+      <button onclick="report2()">📌 รายงานช่วงที่ 2</button>
+      <button onclick="reportFull()">✅ รายงานรวม</button>
+    </div>
+    <div id="ospPage" class="container page">
+      <h2>🛠 สร้างรายงาน OSP</h2>
+
+      <textarea id="ospText" rows="12" placeholder="วางใบงาน OSP"> </textarea>
+
+      <div class="top-btn-group">
+        <button onclick="parseOSP()" class="btn-top btn-primary">
+          📥 แปลงข้อมูล
+        </button>
+
+        <button onclick="copyOSPReport()" class="btn-top btn-success">
+          📋 คัดลอกรายงาน
+        </button>
+      </div>
+
+      <textarea id="ospReport" rows="30" placeholder="รายงานที่แปลงแล้ว">      </textarea>
+    </div>
+
+    <script>
+      function parseOSP() {
+        const text = document.getElementById('ospText').value;
+
+        // JB
+        const job = (text.match(/JB\d{2}-\d+\([A-Z]+\)/) || [''])[0];
+
+        // Title
+        const title = (text.match(/Title\s*:\s*([\s\S]*?)JB ID\s*:/) || [
+          '',
+          '',
+        ])[1]
+          .replace(/\n/g, ' ')
+          .replace(/\s+/g, ' ')
+          .trim();
+
+        // Priority
+        const priority = (text.match(/Priority\s*:\s*(.+)/) || [
+          '',
+          '',
+        ])[1].trim();
+
+        // Start
+        const start = (text.match(/Assign Date\s*:\s*(.+)/) || [
+          '',
+          '',
+        ])[1].trim();
+
+        // Finish
+        const finish = (text.match(/To be Finish before\s*:\s*(.+)/) || [
+          '',
+          '',
+        ])[1].trim();
+
+        // GPS
+        let gps = '';
+
+        const coord = title.match(/\((\d+\.\d+,\s*\d+\.\d+)\)/);
+
+        if (coord) {
+          gps = coord[1];
+        }
+
+        const report = `ใบงานที่ :: 1 ครับ
+
+JB ID : ${job}
+
+Title : ${title}
+
+Priority : ${priority}
+
+เข้าตรวจสอบแก้ไข SP Down ครับ
+
+${gps}
+
+*รายละเอียด เช่น แผนที่ Igis จะส่งใน เมนู OSP บน TTSM ครับ
+
+:: ใบงานเริ่มต้น : ${start}
+:: ใบงานเสร็จสิ้น : ${finish}
+:: รับงาน :
+:: เดินทาง :
+:: ระยะทาง :
+:: On Site :
+:: ผล test OTDR :
+:: รายละเอียดเพิ่มเติม :
+:: เจอแผล :
+:: สาเหตุเสีย :
+:: เริ่มแก้ไข :
+:: แก้ไขโดย :
+:: เริ่มตัดต่อหัวที่ 1 :
+:: พิกัดหัวต่อที่ 1 :
+:: เริ่มตัดต่อหัวที่ 2 :
+:: พิกัดหัวต่อที่ 2 :
+:: เริ่มตัดต่อหัวที่ 3 :
+:: พิกัดหัวต่อที่ 3 :
+:: เริ่มตัดต่อหัวที่ 4 :
+:: พิกัดหัวต่อที่ 4 :
+:: ไม่มี alarm (Done Job) :
+:: โยกคอร์ใช้งาน :
+:: สาเหตุล่าช้า :
+
+:: รายการ Material ที่ใช้งาน
+
+- Cable ARSS 12 core =
+- Closure 12 core = 2
+- B-LASHED Cable Support =
+- Protective sleeve =
+- PVC TAPE =
+- Preformed Guy Grip Deadend =
+- Preformed (ปีกนก) =
+- Machine Bolt 5/8" x 12" =
+- Patch cord =
+- Pigtail =
+- Connector =`;
+
+        document.getElementById('ospReport').value = report;
+      }
+      function copyOSPReport() {
+        const text = document.getElementById('ospReport').value;
+
+        navigator.clipboard.writeText(text);
+
+        alert('✅ คัดลอกรายงานแล้ว');
+      }
+
+      // ✅ Save
+      function saveData() {
+        const data = {
+          zone: get('zone'),
+          job: get('job'),
+          title: get('title'),
+          ron: get('ron'),
+          tel: get('tel'),
+          created: get('created'),
+          finish: get('finish'),
+          accept: get('accept'),
+          depart: get('depart'),
+          onsite: get('onsite'),
+          distance: get('distance'),
+          cause: get('cause'),
+          done: get('done'),
+        };
+
+        localStorage.setItem('reportData', JSON.stringify(data));
+        alert('✅ บันทึกเรียบร้อย');
+      }
+
+      // ✅ Load
+      function loadData() {
+        const data = JSON.parse(localStorage.getItem('reportData'));
+
+        if (!data) {
+          alert('❌ ไม่พบข้อมูล');
+          return;
+        }
+
+        document.getElementById('zone').value = data.zone || '';
+        document.getElementById('job').value = data.job || '';
+        document.getElementById('title').value = data.title || '';
+        document.getElementById('ron').value = data.ron || '';
+        document.getElementById('tel').value = data.tel || '';
+        document.getElementById('created').value = data.created || '';
+        document.getElementById('finish').value = data.finish || '';
+        document.getElementById('accept').value = data.accept || '';
+        document.getElementById('depart').value = data.depart || '';
+        document.getElementById('onsite').value = data.onsite || '';
+        document.getElementById('distance').value = data.distance || '';
+        document.getElementById('cause').value = data.cause || '';
+        document.getElementById('done').value = data.done || '';
+
+        alert('✅ โหลดข้อมูลสำเร็จ');
+      }
+      function resetForm() {
+        const inputs = document.querySelectorAll('input, textarea, select');
+
+        inputs.forEach((el) => {
+          el.value = '';
+        });
+
+        localStorage.removeItem('reportData');
+
+        alert('✅ ล้างข้อมูลทั้งหมดแล้ว');
+      }
+
+      function get(id) {
+        return document.getElementById(id).value;
+      }
+
+      // ✅ ช่วงที่ 1
+      function report1() {
+        const text = ` Update 
+Zone : ${get('zone')}
+JOB : ${get('job')}
+Title : ${get('title')}
+
+กองงาน/ชื่อพนักงาน : ${get('ron')}
+Tel. : ${get('tel')}
+
+:: priority : Critical
+:: Service : Outage
+:: Subsystem : EDS-OSP
+:: Created : ${get('created')}
+:: Finish : ${get('finish')}
+:: Assign By : Auto Dispatch
+
+:: Accept(Time) : ${get('accept')}
+:: Depart(Time) : ${get('depart')}
+:: เดินทาง : ${get('distance')} km.`;
+
+        navigator.clipboard.writeText(text);
+        alert('คัดลอกช่วงที่ 1 ✅');
+      }
+
+      // ✅ ช่วงที่ 2
+      function report2() {
+        const text = ` Update 
+:: On site : ${get('onsite')}
+:: (เจอแผล) : 
+:: สาเหตุเสีย : ${get('cause')}
+:: Done : ${get('done')}`;
+
+        navigator.clipboard.writeText(text);
+        alert('คัดลอกช่วงที่ 2 ✅');
+      }
+
+      // ✅ รวม
+      function reportFull() {
+        const text = ` Update 
+
+Zone : ${get('zone')}
+JOB : ${get('job')}
+Title : ${get('title')}
+
+กองงาน/ชื่อพนักงาน : ${get('ron')}
+Tel. : ${get('tel')}
+
+:: priority : Critical
+:: Service : Outage
+:: Subsystem : EDS-OSP
+:: Created : ${get('created')}
+:: Finish : ${get('finish')}
+:: Assign By : Auto Dispatch
+
+:: Accept(Time) : ${get('accept')}
+:: Depart(Time) : ${get('depart')}
+:: เดินทาง : ${get('distance')} km.
+
+:: On site : 
+:: (เจอแผล) : 
+:: สาเหตุเสีย : ${get('cause')}
+:: Done : ${get('done')}`;
+
+        navigator.clipboard.writeText(text);
+        alert('คัดลอกรายงานเต็ม ✅');
+      }
+    </script>
+    <script src="./index_files/tesseract.min.js.download"></script>
+    <script>
+      function parseText() {
+        const text = document.getElementById('rawText').value;
+
+        if (!text) {
+          alert('วางข้อมูลก่อน');
+          return;
+        }
+
+        // ✅ JOB
+        const jobMatch = text.match(/JB\d{2}-\d+/);
+        if (jobMatch) document.getElementById('job').value = jobMatch[0];
+
+        // ✅ Title (multi-line กันตัด)
+        const titleMatch = text.match(/Title\s*:\s*([\s\S]*?)JB ID\s*:/);
+
+        if (titleMatch) {
+          let title = titleMatch[1]
+            .replace(/\n/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim();
+
+          document.getElementById('title').value = title;
+        }
+
+        // ✅ RON (Assign To)
+        const assignMatch = text.match(/Assign To\s*:\s*(.+)/);
+        if (assignMatch) {
+          document.getElementById('ron').value = assignMatch[1].trim();
+        }
+
+        // ✅ Tel (เอาเบอร์มือถือจาก Assign To)
+        const telSection = text.split('Assign To')[1] || '';
+        const telMatch = telSection.match(/0[689]\d{8}/);
+        if (telMatch) {
+          document.getElementById('tel').value = telMatch[0];
+        }
+
+        // ✅ Created
+        const assignDateMatch = text.match(/Assign Date\s*:\s*(.+)/);
+        if (assignDateMatch) {
+          document.getElementById('created').value = assignDateMatch[1].trim();
+        }
+
+        // ✅ Finish
+        const finishMatch = text.match(/Finish before\s*:\s*(.+)/);
+        if (finishMatch) {
+          document.getElementById('finish').value = finishMatch[1].trim();
+        }
+
+        // ✅ Zone auto (จาก Region)
+        const regionMatch = text.match(/Region\s*:\s*(.+)/);
+        if (regionMatch) {
+          const region = regionMatch[1];
+          if (region.includes('NorthEast')) {
+            document.getElementById('zone').value = 'KKN';
+          }
+        }
+
+        alert('✅ กรอกข้อมูลอัตโนมัติสำเร็จ');
+      }
+      function showPage(pageId, btn) {
+        document.querySelectorAll('.page').forEach((page) => {
+          page.classList.remove('active');
+        });
+
+        document.getElementById(pageId).classList.add('active');
+
+        document.querySelectorAll('.tab-btn').forEach((tab) => {
+          tab.classList.remove('active');
+        });
+
+        btn.classList.add('active');
+      }
+      window.onload = function () {
+        loadData();
+      };
+    </script>
+  
+
+
+      <script>
+        const source = new EventSource('/livereload');
+        const reload = () => location.reload(true);
+        source.onmessage = reload;
+        source.onerror = () => (source.onopen = reload);
+        console.log('[servor] listening for file changes');
+      </script>
+    </body></html>
