@@ -75,7 +75,7 @@
       }
       .top-btn-group {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr 1fr 120px;
         gap: 10px;
         margin-bottom: 15px;
       }
@@ -171,6 +171,11 @@
       .row input {
         flex: 1;
       }
+      .top-btn-group {
+        display: grid;
+        grid-template-columns: 1fr 1fr 120px;
+        gap: 10px;
+      }
     </style>
   </head>
 
@@ -200,9 +205,8 @@
         <button onclick="copyEDSReport()" class="btn-top btn-success">
           📋 คัดลอกรายงาน
         </button>
-      </div>
-      <div class="mini-btn-area">
-        <button onclick="clearEDS()" class="btn-clear">🗑 Clear</button>
+
+        <button onclick="clearEDS()" class="btn-top btn-danger">🗑 Clear</button>
       </div>
 
       <textarea id="edsReport" rows="25" placeholder="รายงาน EDS ที่แปลงแล้ว">
@@ -223,9 +227,8 @@
         <button onclick="copyOSPReport()" class="btn-top btn-success">
           📋 คัดลอกรายงาน
         </button>
-      </div>
-      <div class="mini-btn-area">
-        <button onclick="clearOSP()" class="btn-clear">🗑 Clear</button>
+
+        <button onclick="clearOSP()" class="btn-top btn-danger">🗑 Clear</button>
       </div>
       <textarea
         id="ospReport"
