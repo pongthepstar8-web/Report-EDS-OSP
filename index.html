@@ -411,6 +411,10 @@ ${issue}
           '',
           '',
         ])[1].trim();
+        const assignBy = (text.match(
+          /Assign by\s*:\s*([\s\S]*?)Telephone\s*:/i
+        ) || ['', ''])[1].trim();
+
         const report = `📋 Update
 Zone : [ระบุ UBN/KKN]
 JOB : ${job}
@@ -426,7 +430,7 @@ Tel. : ${tel}
 :: Problem Service : ${problemService}
 :: Created : ${created}
 :: Finish : ${finish}
-:: Assign By : Auto Dispatch
+:: Assign By : ${assignBy}
 ━━━━━━━━━━━━━━━━━━
 :: Accept(Time) : [ระบุเวลา]
 :: Depart(Time) : [ระบุเวลา]
