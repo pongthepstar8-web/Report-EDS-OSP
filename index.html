@@ -327,7 +327,21 @@
 
     <div id="ospPage" class="container page">
       <h2>👷 OSP OUTSOURCING</h2>
+      <select id="teamSelect" onchange="teamChanged()">
+        <option value="">-- เลือกทีม --</option>
 
+        <option value="MA UBN1 :: ทวีศักดิ์ โพธิ์พงษ์ :: 0649255124">
+          MA UBN1 :: ทวีศักดิ์ โพธิ์พงษ์ :: 0649255124
+        </option>
+
+        <option value="MA SSK1 :: วิรัตน์ จำปาหอม :: 0830896061">
+          MA SSK1 :: วิรัตน์ จำปาหอม :: 0830896061
+        </option>
+
+        <option value="MA BKN1 :: เชี่ยวชาญ มะณีวรรณ :: 0988055009">
+          MA BKN1 :: เชี่ยวชาญ มะณีวรรณ :: 0988055009
+        </option>
+      </select>
       <textarea id="ospText" rows="10" placeholder="วางใบงาน OSP จาก TTSM">
       </textarea>
 
@@ -351,6 +365,13 @@
     </div>
 
     <script>
+      function teamChanged() {
+        const team = document.getElementById('teamSelect').value;
+
+        if (!team) return;
+
+        writeLog('OSP', 'Select Team', '-');
+      }
       function loginUser() {
         const user = document.getElementById('loginUser').value.trim();
 
@@ -370,6 +391,7 @@
       }
 
       function parseOSP() {
+        const team = document.getElementById('teamSelect').value;
         const text = document.getElementById('ospText').value;
 
         // JB
@@ -440,7 +462,7 @@
         }
 
         const report = `👷 OSP OUTSOURCING NQM 
-TEAM :: [ระบุ]
+TEAM :: ${team || '[เลือกทีม]'}
 ━━━━━━━━━━━━━━━━━━━━━━
 ใบงานที่ :: [ระบุ]
 JB ID : ${job}
@@ -507,7 +529,10 @@ ${gps}
         alert('✅ คัดลอกรายงานแล้ว');
       }
       function clearOSP() {
+        document.getElementById('teamSelect').selectedIndex = 0;
+
         document.getElementById('ospText').value = '';
+
         document.getElementById('ospReport').value = '';
 
         alert('✅ ล้างข้อมูลแล้ว');
@@ -638,11 +663,14 @@ Tel. : ${tel}
         const username =
           document.getElementById('username')?.value || 'Unknown';
 
+        const team = document.getElementById('teamSelect')?.value || '';
+
         console.log('SEND', {
           user: username,
           page,
           action,
           job,
+          team,
         });
 
         fetch(
@@ -654,6 +682,7 @@ Tel. : ${tel}
               page: page,
               action: action,
               job: job,
+              team: team,
             }),
           }
         )
@@ -684,6 +713,8 @@ Tel. : ${tel}
           document.getElementById('username').value = '';
 
           document.getElementById('loginUser').value = '';
+
+          document.getElementById('teamSelect').selectedIndex = 0;
 
           document.getElementById('loginOverlay').style.display = 'flex';
 
