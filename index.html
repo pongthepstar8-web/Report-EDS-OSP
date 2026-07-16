@@ -413,12 +413,17 @@
         ])[1].trim();
         let issue = 'เข้าตรวจสอบแก้ไขเหตุขัดข้อง';
 
-        if (title.includes('Splitter Down'))
+        const titleUpper = title.toUpperCase();
+
+        if (titleUpper.includes('PON') && titleUpper.includes('HIGH LOSS')) {
+          issue = 'เข้าตรวจสอบ PON High Loss';
+        } else if (titleUpper.includes('HIGH LOSS')) {
+          issue = 'เข้าตรวจสอบ High Loss';
+        } else if (titleUpper.includes('PON DOWN')) {
+          issue = 'เข้าตรวจสอบ PON Down';
+        } else if (titleUpper.includes('SPLITTER DOWN')) {
           issue = 'เข้าตรวจสอบ Splitter Down';
-
-        if (title.includes('PON Down')) issue = 'เข้าตรวจสอบ PON Down';
-
-        if (title.includes('High Loss')) issue = 'เข้าตรวจสอบ High Loss';
+        }
 
         // ตรวจค่า Rx
         const rxMatch = title.match(/Rx\s*[-:]\s*(-?\d+\.?\d*)/i);
@@ -466,9 +471,7 @@ TEAM :: ${team || '[เลือกทีม]'}
 ━━━━━━━━━━━━━━━━━━━━━━
 ใบงานที่ :: [ระบุ]
 JB ID : ${job}
-
 Title : ${title}
-
 Priority : ${priority}
 ${issue}
 ${gps}
