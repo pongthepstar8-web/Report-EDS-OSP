@@ -662,7 +662,11 @@ Tel. : ${tel}
         const username =
           document.getElementById('username')?.value || 'Unknown';
 
-        const team = document.getElementById('teamSelect')?.value || '';
+        let team = '';
+
+        if (page === 'OSP') {
+          team = document.getElementById('teamSelect')?.value || '';
+        }
 
         console.log('SEND', {
           user: username,
