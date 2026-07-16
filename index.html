@@ -361,24 +361,14 @@
 
         document.getElementById('username').value = user;
 
-        localStorage.setItem('username', user);
-
         document.getElementById('loginOverlay').style.display = 'none';
 
+        resetIdleTimer();
+
         writeLog('SYSTEM', 'Login', '-');
+        writeLog('SYSTEM', 'Open Dashboard', '-');
       }
 
-      window.onload = function () {
-        const savedUser = localStorage.getItem('username');
-
-        if (savedUser) {
-          document.getElementById('username').value = savedUser;
-
-          document.getElementById('loginOverlay').style.display = 'none';
-
-          writeLog('SYSTEM', 'Open Dashboard', '-');
-        }
-      };
       function parseOSP() {
         const text = document.getElementById('ospText').value;
 
@@ -648,8 +638,6 @@ Tel. : ${tel}
         const username =
           document.getElementById('username')?.value || 'Unknown';
 
-        localStorage.setItem('username', username);
-
         console.log('SEND', {
           user: username,
           page,
@@ -674,14 +662,55 @@ Tel. : ${tel}
       } // <----- ต้องมีบรรทัดนี้
 
       window.onload = function () {
-        const savedUser = localStorage.getItem('username');
+        document.getElementById('loginOverlay').style.display = 'flex';
 
-        if (savedUser) {
-          document.getElementById('username').value = savedUser;
-        }
+        document.getElementById('username').value = '';
 
-        writeLog('SYSTEM', 'Open Dashboard', '-');
+        document.getElementById('loginUser').value = '';
+
+        document.getElementById('loginUser').focus();
       };
+      const IDLE_TIMEOUT = 30 * 60 * 1000; // 30 นาที
+      let idleTimer;
+
+      function resetIdleTimer() {
+        clearTimeout(idleTimer);
+
+        idleTimer = setTimeout(() => {
+          clearTimeout(idleTimer);
+
+          writeLog('SYSTEM', 'Auto Logout', '-');
+
+          document.getElementById('username').value = '';
+
+          document.getElementById('loginUser').value = '';
+
+          document.getElementById('loginOverlay').style.display = 'flex';
+
+          document.getElementById('loginUser').focus();
+
+          alert('ไม่มีการใช้งานเป็นเวลานาน กรุณาเข้าสู่ระบบใหม่');
+        }, IDLE_TIMEOUT);
+      }
+
+      // ตรวจจับการใช้งาน
+      [
+        'mousemove',
+        'mousedown',
+        'click',
+        'scroll',
+        'keydown',
+        'touchstart',
+      ].forEach((event) => {
+        document.addEventListener(event, resetIdleTimer);
+      });
+      document
+        .getElementById('loginUser')
+        .addEventListener('keydown', function (e) {
+          if (e.key === 'Enter') {
+            loginUser();
+          }
+        });
     </script>
   </body>
 </html>
