@@ -372,11 +372,24 @@
 
         writeLog('OSP', 'Select Team', '-');
       }
+      const blockedUsers = ['kuy', 'hee'];
+
       function loginUser() {
         const user = document.getElementById('loginUser').value.trim();
 
         if (!user) {
           alert('กรุณากรอกชื่อผู้ใช้งาน');
+          return;
+        }
+
+        // ตรวจสอบ Blacklist
+        if (blockedUsers.includes(user.toLowerCase())) {
+          writeLog('SYSTEM', 'Blocked Login', '-');
+
+          alert('❌ ไม่มีสิทธิ์เข้าใช้งานระบบ');
+
+          document.getElementById('loginUser').value = '';
+
           return;
         }
 
